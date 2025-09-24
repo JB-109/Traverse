@@ -1,5 +1,5 @@
 import pygame
-from constants import ASTEROID_MAX_RADIUS, SCREEN_HEIGHT, SCREEN_WIDTH
+from constants import *
 from player import player
 
 def main():
@@ -8,8 +8,8 @@ def main():
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
     
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    new_obj = pygame.time.Clock()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+    internal_clock = pygame.time.Clock()
     player_obj = player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     dt = 0
 
@@ -17,14 +17,16 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+        
+        dt = internal_clock.tick(60) / 1000 #update the object by the time elapsed since the last tick 
 
         screen.fill("black")
-        player_obj.draw(screen)
         player_obj.update(dt)
-        pygame.display.flip()
+        player_obj.draw(screen)
         
-        new_dt = new_obj.tick(60)
-        dt = new_dt / 1000
+        print(internal_clock.get_fps())
+
+        pygame.display.flip()
 
 if __name__ == "__main__":
     main()
